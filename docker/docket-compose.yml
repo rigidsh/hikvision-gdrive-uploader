@@ -1,0 +1,48 @@
+version: "3.3"
+services:
+  hikvision-exporter-cam1:
+    build: ./hikvision-exporter
+    volumes:
+      - type: volume
+        source: hikvision_data
+        target: /data
+    environment:
+      - HIKVISION_HOST=192.168.10.100
+      - HIKVISION_PORT=554
+      - HIKVISION_LOGIN=admin
+      - HIKVISION_PASSWORD=12345
+      - HIKVISION_CHANNEL=1
+      - HIKVISION_STREAM=01
+    restart: unless-stopped
+  hikvision-exporter-cam2:
+    build: ./hikvision-exporter
+    volumes:
+      - type: volume
+        source: hikvision_data
+        target: /data
+    environment:
+      - HIKVISION_HOST=192.168.10.100
+      - HIKVISION_PORT=554
+      - HIKVISION_LOGIN=admin
+      - HIKVISION_PASSWORD=12345
+      - HIKVISION_CHANNEL=2
+      - HIKVISION_STREAM=01
+    restart: unless-stopped
+  hikvision-gdrive-uploader:
+    build: ./hikvision-gdrive-uploader
+    environment:
+      - HIKVISION_GDRIVE_ROOT=hikvision
+      - HIKVISION_DATA=/data
+      - HIKVISION_UPLOAD_INTERVAL=1m
+      - HIKVISION_DELETE_AFTER=18h
+    volumes:
+      - type: volume
+        source: hikvision_data
+        target: /data
+      - type: bind
+        source: ./secrets
+        target: /secrets
+    restart: unless-stopped
+volumes:
+  hikvision_data:
+
