@@ -25,6 +25,11 @@ func StartUploadingData(localContentAPI FileAPI, uploadAPI FileAPI, uploadInterv
 			}
 		}
 		log.Println("Uploading done")
+		if len(filesToUpload) == 0 {
+			log.Printf("No files to upload. Also will skip delete iteration")
+			continue
+		}
+
 		log.Println("Start deleting old files")
 
 		filesToDelete, err := uploadAPI.GetFilesCreatedBefore(time.Now().Add(-1 * deleteAfter))
