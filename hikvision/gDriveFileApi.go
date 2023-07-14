@@ -19,9 +19,9 @@ type GDriveFileAPI struct {
 	root          File
 }
 
-func NewGDriveFileAPI(rootFolderName string) (*GDriveFileAPI, error) {
+func NewGDriveFileAPI(rootFolderName string, credentialsPath string, tokenPath string) (*GDriveFileAPI, error) {
 	ctx := context.Background()
-	b, err := os.ReadFile("/secrets/credentials.json")
+	b, err := os.ReadFile(credentialsPath)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -31,8 +31,7 @@ func NewGDriveFileAPI(rootFolderName string) (*GDriveFileAPI, error) {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 
-	tokFile := "/secrets/token.json"
-	tok, err := tokenFromFile(tokFile)
+	tok, err := tokenFromFile(tokenPath)
 	client := config.Client(context.Background(), tok)
 
 	gDriveService, err := drive.NewService(ctx, option.WithHTTPClient(client))
