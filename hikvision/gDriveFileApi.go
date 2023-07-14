@@ -140,7 +140,7 @@ func (fileAPI *GDriveFileAPI) CreateFile(name string, content io.Reader) (File, 
 	}
 
 	newFile, err := fileAPI.gDriveService.Files.Create(uploadFile).Media(content).
-		ProgressUpdater(func(now, size int64) { fmt.Printf("%d, %d\r", now, size) }).
+		ProgressUpdater(func(now, size int64) { log.Printf("%d, %d\r", now, size) }).
 		Do()
 
 	if err != nil {
