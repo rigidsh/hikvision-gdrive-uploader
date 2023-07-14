@@ -35,14 +35,21 @@ services:
       - HIKVISION_DATA=/data
       - HIKVISION_UPLOAD_INTERVAL=1m
       - HIKVISION_DELETE_AFTER=18h
+      - HIKVISION_GOOGLE_API_CREDENTIALS=/run/secrets/google_drive_credentials.json
+      - HIKVISION_GOOGLE_API_TOKEN=/run/secrets/google_drive_token.json
+    secrets:
+      - google_drive_credentials.json
+      - google_drive_token.json
     volumes:
       - type: volume
         source: hikvision_data
         target: /data
-      - type: bind
-        source: ./secrets
-        target: /secrets
     restart: unless-stopped
 volumes:
   hikvision_data:
+secrets:
+  google_drive_credentials.json:
+    file: ./secrets/credentials.json
+  google_drive_token.json:
+    file: ./secrets/token.json
 
